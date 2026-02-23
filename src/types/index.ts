@@ -2,7 +2,7 @@
 export type LetterStatus = 'correct' | 'present' | 'absent' | 'empty' | 'tbd';
 
 // Single letter tile
-export interface tile {
+export interface Tile {
     letter: string;
     status: LetterStatus;
 }
@@ -20,6 +20,7 @@ export interface GameStats {
     gamesPlayed: number;
     gamesWon: number;
     currentStreak: number;
+    maxStreak: number;
     guessDistribution: number[];
 }
 
