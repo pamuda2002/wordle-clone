@@ -3,9 +3,7 @@ import type { GameStats, GameState } from '../types';
 const STATS_KEY = 'wordle-stats';
 const GAME_STATE_KEY = 'wordle-game-state';
 
-/**
- * Get default stats object
- */
+//Get default stats object
 export function getDefaultStats(): GameStats {
   return {
     gamesPlayed: 0,
@@ -16,9 +14,7 @@ export function getDefaultStats(): GameStats {
   };
 }
 
-/**
- * Load stats from localStorage
- */
+//Load stats from localStorage
 export function loadStats(): GameStats {
   try {
     const saved = localStorage.getItem(STATS_KEY);
@@ -31,9 +27,7 @@ export function loadStats(): GameStats {
   return getDefaultStats();
 }
 
-/**
- * Save stats to localStorage
- */
+//Save stats to localStorage
 export function saveStats(stats: GameStats): void {
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
@@ -42,9 +36,7 @@ export function saveStats(stats: GameStats): void {
   }
 }
 
-/**
- * Update stats after a game
- */
+//Update stats after a game
 export function updateStats(
   currentStats: GameStats, 
   won: boolean, 
@@ -66,9 +58,7 @@ export function updateStats(
   return newStats;
 }
 
-/**
- * Load game state from localStorage
- */
+//Load game state from localStorage
 export function loadGameState(): GameState | null {
   try {
     const saved = localStorage.getItem(GAME_STATE_KEY);
@@ -81,9 +71,7 @@ export function loadGameState(): GameState | null {
   return null;
 }
 
-/**
- * Save game state to localStorage
- */
+// Save game state to localStorage
 export function saveGameState(state: GameState): void {
   try {
     localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
@@ -92,9 +80,7 @@ export function saveGameState(state: GameState): void {
   }
 }
 
-/**
- * Clear game state from localStorage
- */
+// Clear game state from localStorage
 export function clearGameState(): void {
   try {
     localStorage.removeItem(GAME_STATE_KEY);
