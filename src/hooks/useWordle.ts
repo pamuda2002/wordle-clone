@@ -1,26 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
-import type { 
-  GameStatus, 
-  KeyboardStatus, 
-  Tile, 
-  GameStats 
-} from '../types';
-import { 
-  getRandomWord, 
-  isValidWord, 
-  evaluateGuess, 
-  createTilesFromGuess,
-  createEmptyTiles,
-  updateKeyboardStatus 
-} from '../utils/gameUtils';
-import { 
-  loadStats, 
-  saveStats, 
-  updateStats,
-  loadGameState,
-  saveGameState,
-  clearGameState 
-} from '../utils/storage';
+import type { GameStatus, KeyboardStatus, Tile, GameStats } from '../types';
+import { getRandomWord, isValidWord, evaluateGuess, createTilesFromGuess,createEmptyTiles,updateKeyboardStatus } from '../utils/gameUtils';
+import { loadStats, saveStats, updateStats,loadGameState,saveGameState,clearGameState } from '../utils/storage';
 import { WORD_LENGTH, MAX_GUESSES } from '../utils/constants';
 
 interface UseWordleReturn {
@@ -37,16 +18,12 @@ interface UseWordleReturn {
   resetGame: () => void;
 }
 
-// ==========================================
 // Helper function to create empty board
-// ==========================================
 function createEmptyBoard(): Tile[][] {
   return Array(MAX_GUESSES).fill(null).map(() => createEmptyTiles());
 }
 
-// ==========================================
 // Helper function to get initial game state
-// ==========================================
 interface InitialGameState {
   solution: string;
   guesses: Tile[][];
@@ -100,9 +77,7 @@ function getInitialGameState(): InitialGameState {
   };
 }
 
-// ==========================================
 // Main Hook
-// ==========================================
 export function useWordle(): UseWordleReturn {
   // ✅ Use lazy initialization - function runs only once
   const [gameState, setGameState] = useState<InitialGameState>(getInitialGameState);
@@ -117,9 +92,7 @@ export function useWordle(): UseWordleReturn {
   // Stats - also use lazy initialization
   const [stats, setStats] = useState<GameStats>(loadStats);
 
-  // ==========================================
   // Save game state to localStorage
-  // ==========================================
   useEffect(() => {
     if (solution) {
       const guessStrings = guesses
@@ -137,16 +110,12 @@ export function useWordle(): UseWordleReturn {
     }
   }, [solution, guesses, currentGuess, gameStatus, currentRow]);
 
-  // ==========================================
   // Helper to update specific game state fields
-  // ==========================================
   const updateGameState = useCallback((updates: Partial<InitialGameState>) => {
     setGameState(prev => ({ ...prev, ...updates }));
   }, []);
 
-  // ==========================================
   // Initialize new game
-  // ==========================================
   const initializeNewGame = useCallback(() => {
     const newWord = getRandomWord();
     console.log('Solution:', newWord);
@@ -165,9 +134,7 @@ export function useWordle(): UseWordleReturn {
     clearGameState();
   }, []);
 
-  // ==========================================
   // Create tiles for current row
-  // ==========================================
   const createCurrentRowTiles = useCallback((guess: string): Tile[] => {
     const tiles: Tile[] = [];
     
@@ -182,9 +149,7 @@ export function useWordle(): UseWordleReturn {
     return tiles;
   }, []);
 
-  // ==========================================
   // Handle key press
-  // ==========================================
   const handleKeyPress = useCallback((key: string) => {
     if (gameStatus !== 'playing' || isRevealing) return;
     
@@ -282,9 +247,7 @@ export function useWordle(): UseWordleReturn {
     createCurrentRowTiles
   ]);
 
-  // ==========================================
   // Reset game
-  // ==========================================
   const resetGame = useCallback(() => {
     initializeNewGame();
   }, [initializeNewGame]);
