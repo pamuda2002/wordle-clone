@@ -1,0 +1,93 @@
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+}
+
+.key {
+  height: 58px;
+  min-width: 43px;
+  padding: 0;
+  border-radius: 4px;
+  background-color: var(--key-bg);
+  color: var(--color-on-surface);
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  max-width: 43px;
+  
+  transition: background-color 0.1s ease, transform 0.1s ease;
+}
+
+.key.special {
+  min-width: 65px;
+  max-width: 65px;
+  font-size: 0.75rem;
+}
+
+.key:hover {
+  opacity: 0.9;
+}
+
+.key:active {
+  transform: scale(0.95);
+}
+
+.key:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Key states */
+.key.correct {
+  background-color: var(--key-bg-correct);
+}
+
+.key.present {
+  background-color: var(--key-bg-present);
+}
+
+.key.absent {
+  background-color: var(--key-bg-absent);
+}
+
+/* SVG icon in backspace */
+.key svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .key {
+    height: 50px;
+    min-width: 28px;
+    max-width: 38px;
+    font-size: 0.8rem;
+  }
+  
+  .key.special {
+    min-width: 50px;
+    max-width: 60px;
+    font-size: 0.7rem;
+  }
+  
+  .keyboard-row {
+    gap: 4px;
+  }
+}

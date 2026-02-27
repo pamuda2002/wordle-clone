@@ -1,0 +1,65 @@
+.help-modal {
+  line-height: 1.6;
+}
+
+.help-modal p {
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+}
+
+.examples {
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.examples p {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.example {
+  margin-bottom: 16px;
+}
+
+.example-tiles {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.example-tile {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 2px solid var(--color-border-filled);
+}
+
+.example-tile.correct {
+  background-color: var(--color-correct);
+  border-color: var(--color-correct);
+  color: white;
+}
+
+.example-tile.present {
+  background-color: var(--color-present);
+  border-color: var(--color-present);
+  color: white;
+}
+
+.example-tile.absent {
+  background-color: var(--color-absent);
+  border-color: var(--color-absent);
+  color: white;
+}
+
+.example p {
+  font-weight: normal;
+  font-size: 0.8rem;
+  color: var(--color-on-surface-secondary);
+}

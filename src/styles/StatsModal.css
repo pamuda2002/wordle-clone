@@ -1,0 +1,111 @@
+.stats-modal {
+  text-align: center;
+}
+
+.game-result {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.result-text {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.result-text.win {
+  color: var(--color-correct);
+}
+
+.result-text.lose {
+  color: var(--color-on-surface-secondary);
+}
+
+.result-text strong {
+  color: var(--color-on-surface);
+  text-transform: uppercase;
+}
+
+.stats-modal h3 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin: 16px 0 12px;
+  color: var(--color-on-surface);
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  flex: 1;
+  max-width: 80px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-on-surface);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-on-surface-secondary);
+}
+
+.distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 20px;
+}
+
+.distribution-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guess-number {
+  font-size: 0.875rem;
+  font-weight: bold;
+  min-width: 12px;
+}
+
+.distribution-bar {
+  height: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.distribution-count {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+}
+
+.play-again-button {
+  margin-top: 24px;
+  padding: 16px 32px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: var(--color-correct);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.play-again-button:hover {
+  opacity: 0.9;
+}
