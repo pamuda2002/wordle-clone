@@ -1,8 +1,18 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { GameStatus, KeyboardStatus, Tile, GameStats } from '../types';
 import { getRandomWord, isValidWord, evaluateGuess, createTilesFromGuess,createEmptyTiles,updateKeyboardStatus } from '../utils/gameUtils';
-import { loadStats, saveStats, updateStats,loadGameState,saveGameState,clearGameState } from '../utils/storage';
+import { loadStats, saveStats, updateStats, loadGameState,saveGameState,clearGameState } from '../utils/storage';
 import { WORD_LENGTH, MAX_GUESSES } from '../utils/constants';
+
+// Win messages based on number of guesses
+const WIN_MESSAGES = [
+  'Genius!',      // 1 guess
+  'Magnificent!', // 2 guesses
+  'Impressive!',  // 3 guesses
+  'Splendid!',    // 4 guesses
+  'Great!',       // 5 guesses
+  'Phew!'         // 6 guesses
+];
 
 interface UseWordleReturn {
   solution: string;
@@ -14,6 +24,8 @@ interface UseWordleReturn {
   stats: GameStats;
   isInvalidWord: boolean;
   isRevealing: boolean;
+  toastMessage: string;        // Add this
+  clearToast: () => void;      // Add this
   handleKeyPress: (key: string) => void;
   resetGame: () => void;
 }
@@ -36,9 +48,7 @@ interface InitialGameState {
 function getInitialGameState(): InitialGameState {
   const savedState = loadGameState();
   
-  // If there's a saved game that's still in progress, restore it
   if (savedState && savedState.gameStatus === 'playing') {
-    // Rebuild guesses and keyboard from saved guesses
     const restoredGuesses: Tile[][] = [];
     let restoredKeyboard: KeyboardStatus = {};
     
@@ -48,7 +58,6 @@ function getInitialGameState(): InitialGameState {
       restoredKeyboard = updateKeyboardStatus(restoredKeyboard, guess, evaluation);
     });
     
-    // Fill remaining rows with empty tiles
     while (restoredGuesses.length < MAX_GUESSES) {
       restoredGuesses.push(createEmptyTiles());
     }
@@ -63,9 +72,8 @@ function getInitialGameState(): InitialGameState {
     };
   }
   
-  // Start a new game
   const newWord = getRandomWord();
-  console.log('Solution:', newWord); // For debugging
+  console.log('Solution:', newWord);
   
   return {
     solution: newWord,
@@ -79,18 +87,27 @@ function getInitialGameState(): InitialGameState {
 
 // Main Hook
 export function useWordle(): UseWordleReturn {
-  // ✅ Use lazy initialization - function runs only once
   const [gameState, setGameState] = useState<InitialGameState>(getInitialGameState);
   
-  // Destructure for easier access
   const { solution, guesses, currentGuess, currentRow, gameStatus, keyboardStatus } = gameState;
   
   // UI states
   const [isInvalidWord, setIsInvalidWord] = useState<boolean>(false);
   const [isRevealing, setIsRevealing] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
   
-  // Stats - also use lazy initialization
+  // Stats
   const [stats, setStats] = useState<GameStats>(loadStats);
+
+  // Clear toast message
+  const clearToast = useCallback(() => {
+    setToastMessage('');
+  }, []);
+
+  // Show toast helper
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message);
+  }, []);
 
   // Save game state to localStorage
   useEffect(() => {
@@ -110,7 +127,7 @@ export function useWordle(): UseWordleReturn {
     }
   }, [solution, guesses, currentGuess, gameStatus, currentRow]);
 
-  // Helper to update specific game state fields
+  // Helper to update game state
   const updateGameState = useCallback((updates: Partial<InitialGameState>) => {
     setGameState(prev => ({ ...prev, ...updates }));
   }, []);
@@ -131,6 +148,7 @@ export function useWordle(): UseWordleReturn {
     
     setIsInvalidWord(false);
     setIsRevealing(false);
+    setToastMessage('');
     clearGameState();
   }, []);
 
@@ -161,6 +179,7 @@ export function useWordle(): UseWordleReturn {
       
       if (!isValidWord(currentGuess)) {
         setIsInvalidWord(true);
+        showToast('Not in word list');  // ✅ Show toast here
         setTimeout(() => setIsInvalidWord(false), 600);
         return;
       }
@@ -169,11 +188,9 @@ export function useWordle(): UseWordleReturn {
       
       setIsRevealing(true);
       
-      // Update guesses with evaluation
       const newGuesses = [...guesses];
       newGuesses[currentRow] = createTilesFromGuess(currentGuess, evaluation);
       
-      // Update keyboard
       const newKeyboardStatus = updateKeyboardStatus(keyboardStatus, currentGuess, evaluation);
       
       updateGameState({
@@ -181,13 +198,14 @@ export function useWordle(): UseWordleReturn {
         keyboardStatus: newKeyboardStatus
       });
       
-      // Handle game end after animation
       const revealTime = WORD_LENGTH * 350 + 350;
       
       setTimeout(() => {
         setIsRevealing(false);
         
         if (currentGuess === solution) {
+          // ✅ Show win toast here
+          showToast(WIN_MESSAGES[currentRow] || 'Nice!');
           updateGameState({ gameStatus: 'won' });
           setStats(prevStats => {
             const newStats = updateStats(prevStats, true, currentRow + 1);
@@ -195,6 +213,8 @@ export function useWordle(): UseWordleReturn {
             return newStats;
           });
         } else if (currentRow === MAX_GUESSES - 1) {
+          // ✅ Show solution on loss
+          showToast(solution);
           updateGameState({ gameStatus: 'lost' });
           setStats(prevStats => {
             const newStats = updateStats(prevStats, false, currentRow + 1);
@@ -244,7 +264,8 @@ export function useWordle(): UseWordleReturn {
     guesses, 
     keyboardStatus,
     updateGameState,
-    createCurrentRowTiles
+    createCurrentRowTiles,
+    showToast
   ]);
 
   // Reset game
@@ -262,6 +283,8 @@ export function useWordle(): UseWordleReturn {
     stats,
     isInvalidWord,
     isRevealing,
+    toastMessage,
+    clearToast,
     handleKeyPress,
     resetGame
   };
