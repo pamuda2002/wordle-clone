@@ -2,16 +2,22 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 2rem;
   font-weight: bold;
   text-transform: uppercase;
   user-select: none;
   
-  /* Flip animation setup */
+  /* CSS custom properties with defaults */
+  --animation-delay: 0ms;
+  
+  /* 3D perspective for flip effect */
   perspective: 1000px;
+}
+
+.tile-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
 }
 
@@ -24,90 +30,51 @@
   justify-content: center;
   align-items: center;
   backface-visibility: hidden;
-  border: 2px solid var(--color-border);
+  -webkit-backface-visibility: hidden;
   box-sizing: border-box;
 }
 
+/* Front face - visible before evaluation */
 .tile-front {
   background-color: var(--color-background);
+  border: 2px solid var(--color-border);
+  color: var(--color-on-surface);
 }
 
+/* Back face - starts hidden (rotated 180deg) */
 .tile-back {
-  transform: rotateX(180deg);
-  background-color: var(--color-absent);
   border: none;
+  color: white;
+  transform: rotateX(180deg);
+  /* Default background - will be overridden by status */
+  background-color: var(--color-absent);
 }
 
-/* States */
-.tile.empty .tile-front {
-  border-color: var(--color-border);
-}
+/* ==========================================
+   Tile States - Front Face Borders
+   ========================================== */
 
-.tile.tbd .tile-front {
-  border-color: var(--color-border-filled);
-}
-
+/* Tile with letter being typed */
 .tile.filled .tile-front {
   border-color: var(--color-border-filled);
-}
-
-/* Pop animation when typing */
-.tile.pop {
   animation: pop 0.1s ease;
 }
 
 @keyframes pop {
   50% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 
-/* Revealing animation */
-.tile.revealing {
-  animation: flip 0.7s ease forwards;
+/* Invalid shake state */
+.tile.invalid .tile-front {
+  border-color: var(--color-on-surface);
 }
 
-@keyframes flip {
-  0% {
-    transform: rotateX(0);
-  }
-  50% {
-    transform: rotateX(90deg);
-  }
-  100% {
-    transform: rotateX(0);
-  }
-}
+/* ==========================================
+   Back Face Colors (for evaluated tiles)
+   ========================================== */
 
-.tile.revealing .tile-front {
-  animation: hide-front 0.7s ease forwards;
-}
-
-@keyframes hide-front {
-  0%, 50% {
-    visibility: visible;
-  }
-  50.1%, 100% {
-    visibility: hidden;
-  }
-}
-
-.tile.revealing .tile-back {
-  animation: show-back 0.7s ease forwards;
-}
-
-@keyframes show-back {
-  0%, 50% {
-    visibility: hidden;
-    transform: rotateX(180deg);
-  }
-  50.1%, 100% {
-    visibility: visible;
-    transform: rotateX(0);
-  }
-}
-
-/* Evaluated states - applied to back face */
 .tile.correct .tile-back {
   background-color: var(--color-correct);
 }
@@ -120,7 +87,41 @@
   background-color: var(--color-absent);
 }
 
-/* Invalid shake */
-.tile.invalid {
-  border-color: #ff4444 !important;
+/* ==========================================
+   Flip Reveal Animation (while revealing)
+   ========================================== */
+
+.tile.revealing .tile-inner {
+  animation: flip-tile 500ms ease forwards;
+  animation-delay: var(--animation-delay);
+}
+
+@keyframes flip-tile {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+
+/* ==========================================
+   Evaluated State (AFTER reveal is done)
+   Keep the tile flipped to show back face
+   ========================================== */
+
+.tile.correct .tile-inner,
+.tile.present .tile-inner,
+.tile.absent .tile-inner {
+  transform: rotateX(180deg);
+}
+
+/* ==========================================
+   Responsive Font Size
+   ========================================== */
+
+@media (max-width: 400px) {
+  .tile {
+    font-size: 1.5rem;
+  }
 }
