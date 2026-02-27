@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# Wordle Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A polished, fully-functional Wordle clone built with **React**, **TypeScript**, and **Vite**. This project replicates the core mechanics and aesthetic of the popular word-guessing game, featuring smooth animations, responsive design, and game state persistence.
 
-Currently, two official plugins are available:
+![Wordle Clone Preview](public/favicon.svg) <!-- Replace with an actual screenshot if available -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+-   **Core Gameplay:** 6 attempts to guess a hidden 5-letter word.
+-   **Interactive Keyboard:** Support for both on-screen and physical keyboard input.
+-   **Color-coded Feedback:** Tiles change color to indicate correct, present, or absent letters.
+-   **Smooth Animations:** Transitions for letter entry, row shaking (on invalid words), and tile flipping.
+-   **Statistics Tracking:** Track your win percentage, current streak, and guess distribution.
+-   **Responsive Design:** Optimized for both desktop and mobile devices.
+-   **Modals & Toasts:** "How to Play" instructions, detailed statistics, and real-time game notifications.
+-   **Persistence:** Saves your game progress and statistics locally.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+-   **Framework:** [React 19](https://react.dev/)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **Build Tool:** [Vite](https://vitejs.dev/)
+-   **Styling:** Vanilla CSS (Modular & Scalable)
+-   **Linting:** [ESLint](https://eslint.org/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📦 Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/wordle-clone.git
+    cd wordle-clone
+    ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+4.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## 🎮 How to Play
+
+-   Guess the **WORDLE** in 6 tries.
+-   Each guess must be a valid 5-letter word. Hit the enter button to submit.
+-   After each guess, the color of the tiles will change to show how close your guess was to the word.
+
+### Examples:
+
+-   **Green:** The letter is in the word and in the correct spot.
+-   **Yellow:** The letter is in the word but in the wrong spot.
+-   **Gray:** The letter is not in the word in any spot.
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/   # UI components (Board, Keyboard, Modals, etc.)
+├── hooks/        # Custom React hooks (useWordle)
+├── data/         # Word lists and game data
+├── styles/       # Component-specific and global CSS
+├── types/        # TypeScript definitions
+├── utils/        # Helper functions and constants
+└── App.tsx       # Main application entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📄 License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This project is open-source and available under the [MIT License](LICENSE).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+Built with ❤️ by ArryZ
+
